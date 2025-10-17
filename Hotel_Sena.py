@@ -1,7 +1,9 @@
 from Cliente import Cliente
 from Habitaciones import Habitacion
 from Reservacion import Reservacion
+from Pagos import Pago
 from datetime import datetime
+import random
 
 clientes = []
 habitaciones = []
@@ -12,7 +14,7 @@ reservas = []
 # Función auxiliar para validar fechas
 # --------------------------------------------------------------
 def validar_fecha(fecha: str) -> bool:
-    """Verifica que la fecha esté en formato YYYY-MM-DD."""
+    """Verifica que la fecha esté en formato YYYY-MM-DD y sea una fecha válida."""
     try:
         datetime.strptime(fecha, "%Y-%m-%d")
         return True
@@ -34,6 +36,7 @@ def mostrar_menu():
     print("5. Ver habitaciones")
     print("6. Ver reservaciones")
     print("7. Salir")
+    print("8. Procesar pago de una reservación")
     print("=" * 40)
 
 
@@ -110,11 +113,13 @@ def crear_reservacion():
         # Validar fechas de ingreso y salida
         fecha_ingreso = input("Fecha de ingreso (YYYY-MM-DD): ").strip()
         while not validar_fecha(fecha_ingreso):
-            fecha_ingreso = input("Formato inválido. Ingrese nuevamente (YYYY-MM-DD): ").strip()
+            print("Formato o valor de fecha inválido. Ejemplo correcto: 2025-10-02")
+            fecha_ingreso = input("Ingrese nuevamente la fecha de ingreso (YYYY-MM-DD): ").strip()
 
         fecha_salida = input("Fecha de salida (YYYY-MM-DD): ").strip()
         while not validar_fecha(fecha_salida):
-            fecha_salida = input("Formato inválido. Ingrese nuevamente (YYYY-MM-DD): ").strip()
+            print("Formato o valor de fecha inválido. Ejemplo correcto: 2025-10-10")
+            fecha_salida = input("Ingrese nuevamente la fecha de salida (YYYY-MM-DD): ").strip()
 
         # Verificar que la salida sea posterior al ingreso
         ingreso_dt = datetime.strptime(fecha_ingreso, "%Y-%m-%d")
@@ -143,6 +148,42 @@ def crear_reservacion():
         print(f"Error de datos: {e}")
     except Exception as e:
         print(f"Ocurrió un error al crear la reservación: {e}")
+
+
+# --------------------------------------------------------------
+# Procesar pago de una reservación
+# --------------------------------------------------------------
+def procesar_pago_reservacion():
+    print("\n--- Procesar pago de una reservación ---")
+
+    if not reservas:
+        print("No hay reservaciones registradas.")
+        return
+
+    # Mostrar reservas activas
+    activas = [r for r in reservas if r.estado == "activa"]
+    if not activas:
+        print("No hay reservaciones activas para pagar.")
+        return
+
+    for r in activas:
+        total = r.calcular_precio_total()
+        print(f"ID: {r.id_reserva} | Cliente: {r.cliente.nombre} | Total: ${total:,.2f} | Habitación: {r.habitacion.tipo}")
+
+    try:
+        id_r = int(input("Seleccione el ID de la reservación para pagar: "))
+        reserva = next((r for r in activas if r.id_reserva == id_r), None)
+        if not reserva:
+            print("Reservación no encontrada o no activa.")
+            return
+
+        metodo = input("Método de pago (tarjeta, nequi, daviplata, paypal): ").strip().lower()
+        monto = reserva.calcular_precio_total()
+        pago = Pago(id_pago=random.randint(1000, 9999), monto=monto, metodo_pago=metodo)
+        pago.procesar_pago()
+
+    except Exception as e:
+        print(f"Ocurrió un error al procesar el pago: {e}")
 
 
 # --------------------------------------------------------------
@@ -198,6 +239,8 @@ def main():
             ver_habitaciones()
         elif opcion == "6":
             ver_reservaciones()
+        elif opcion == "8":
+            procesar_pago_reservacion()
         elif opcion == "7":
             print("Gracias por usar el sistema del Hotel Sena. Hasta pronto.")
             break
