@@ -1,6 +1,6 @@
 from cliente import Cliente
-from habitaciones import habitacion
-from reservacion import Reservacion
+from Habitaciones import habitacion
+from Reservacion import Reservacion
 
 # ============================================
 #  🏨  SISTEMA DE RESERVACIONES HOTEL SENA
