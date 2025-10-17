@@ -65,7 +65,7 @@ class Habitacion:
     def mostrar_en_consola(self) -> None:
         """Muestra la habitación en consola con formato elegante."""
         print("\n" + "=" * 40)
-        print("        🛏️  INFORMACIÓN DE HABITACIÓN")
+        print("          INFORMACIÓN DE HABITACIÓN")
         print("=" * 40)
         print(f"{'ID':15}: {self.id_habitacion}")
         print(f"{'Tipo':15}: {self.tipo}")

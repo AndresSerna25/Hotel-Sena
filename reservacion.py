@@ -14,7 +14,7 @@ class Reservacion:
         self.fecha_ingreso = datetime.strptime(fecha_ingreso, "%Y-%m-%d")
         self.fecha_salida = datetime.strptime(fecha_salida, "%Y-%m-%d")
         if self.fecha_salida <= self.fecha_ingreso:
-            raise ValueError("⚠️ La fecha de salida debe ser posterior a la de ingreso.")
+            raise ValueError(" La fecha de salida debe ser posterior a la de ingreso.")
 
         self.precio = precio
         self.estado = estado.lower()
@@ -33,7 +33,7 @@ class Reservacion:
         if self.estado == "activa":
             self.estado = "cancelada"
             self.habitacion.estado = "disponible"
-            print(f"❌ Reservación #{self.id_reserva} cancelada correctamente.")
+            print(f" Reservación #{self.id_reserva} cancelada correctamente.")
         else:
             print(f"La reservación #{self.id_reserva} ya estaba cancelada.")
 
@@ -54,7 +54,7 @@ class Reservacion:
         """Muestra la reservación en formato elegante."""
         info = self.mostrar_reservacion()
         print("\n" + "="*40)
-        print("        🏨 RESERVACIÓN DE HOTEL")
+        print("         RESERVACIÓN DE HOTEL")
         print("="*40)
         for k, v in info.items():
             print(f"{k:15}: {v}")
@@ -77,4 +77,4 @@ class Reservacion:
         with open(ruta_archivo, "w", encoding="utf-8") as file:
             json.dump(data, file, indent=4, ensure_ascii=False)
 
-        print(f"💾 Reservación #{self.id_reserva} guardada correctamente en {ruta_archivo}")
+        print(f" Reservación #{self.id_reserva} guardada correctamente en {ruta_archivo}")
